@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts';
+import { ChevronRight } from "lucide-react";
 
 // Type for the calculator's state
 interface CalculatorState {
@@ -46,35 +47,40 @@ const formatCurrency = (value: number): string => {
   }).format(value);
 };
 
-// Animated counter component with faster animation
-const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 300 }) => {
+// Animated counter component with gradual slowdown
+const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 2000 }) => {
   const [count, setCount] = useState(0);
   
   React.useEffect(() => {
-    let start = 0;
-    const end = value;
-    const range = end - start;
-    const increment = end > start ? Math.ceil(range / 10) : Math.floor(range / 10);
-    const stepTime = Math.abs(Math.floor(duration / 10));
-    
-    if (range === 0) {
-      setCount(end);
+    if (value === 0) {
+      setCount(0);
       return;
     }
     
-    const timer = setInterval(() => {
-      start += increment;
+    let startTime: number | null = null;
+    let animationFrame: number;
+    
+    // Easing function to create slowdown effect
+    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+    
+    const animateValue = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = (timestamp - startTime) / duration;
       
-      if ((increment > 0 && start >= end) || (increment < 0 && start <= end)) {
-        clearInterval(timer);
-        setCount(end);
+      if (progress < 1) {
+        // Use easing to slow down as it approaches the target
+        const easedProgress = easeOutQuart(progress);
+        setCount(Math.floor(easedProgress * value));
+        animationFrame = requestAnimationFrame(animateValue);
       } else {
-        setCount(start);
+        setCount(value);
       }
-    }, stepTime);
+    };
+    
+    animationFrame = requestAnimationFrame(animateValue);
     
     return () => {
-      clearInterval(timer);
+      cancelAnimationFrame(animationFrame);
     };
   }, [value, duration]);
   
@@ -100,28 +106,28 @@ const ROICalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const [calculatorState, setCalculatorState] = useState<CalculatorState>({
     adminWaste: {
-      annualSalary: '',
-      hoursPerWeek: '',
-      numberOfMGOs: '',
+      annualSalary: 125000,
+      hoursPerWeek: 15,
+      numberOfMGOs: 4,
       impact: 0,
     },
     siloedCollaboration: {
-      annualSalary: '',
-      hoursWasted: '',
-      numberOfUsers: '',
+      annualSalary: 75000,
+      hoursWasted: 5,
+      numberOfUsers: 2,
       impact: 0,
     },
     missedUpgrades: {
-      upgradableDonors: '',
-      averageGiftSize: '',
-      upgradePercentage: '',
-      realizationRate: '',
+      upgradableDonors: 65,
+      averageGiftSize: 10000,
+      upgradePercentage: 50,
+      realizationRate: 50,
       impact: 0,
     },
     donorLapse: {
-      lapsedDonors: '',
-      averageGift: '',
-      numberOfPortfolios: '',
+      lapsedDonors: 15,
+      averageGift: 10000,
+      numberOfPortfolios: 2,
       impact: 0,
     },
   });
@@ -162,7 +168,7 @@ const ROICalculator: React.FC = () => {
     ].filter(item => item.value > 0);
   }, [calculatorState]);
 
-  // Check if all fields in a section are filled
+  // Check if a section is complete
   const isSectionComplete = (section: keyof CalculatorState): boolean => {
     const sectionData = calculatorState[section];
     return Object.entries(sectionData)
@@ -179,6 +185,29 @@ const ROICalculator: React.FC = () => {
       isSectionComplete('donorLapse')
     );
   }, [calculatorState]);
+
+  // Find the next incomplete section
+  const findNextIncompleteSection = (): string => {
+    const sections: (keyof CalculatorState)[] = ['adminWaste', 'siloedCollaboration', 'missedUpgrades', 'donorLapse'];
+    const currentIndex = sections.indexOf(activeTab as keyof CalculatorState);
+    
+    // First check after the current tab
+    for (let i = currentIndex + 1; i < sections.length; i++) {
+      if (!isSectionComplete(sections[i])) {
+        return sections[i];
+      }
+    }
+    
+    // If not found after current tab, check from the beginning
+    for (let i = 0; i < currentIndex; i++) {
+      if (!isSectionComplete(sections[i])) {
+        return sections[i];
+      }
+    }
+    
+    // If all sections complete, return the current tab
+    return activeTab;
+  };
 
   const handleInputChange = (
     section: keyof CalculatorState,
@@ -250,7 +279,13 @@ const ROICalculator: React.FC = () => {
     setShowResults(true);
   };
 
-  // Animation class for results section
+  // Handle Next button click
+  const handleNextClick = () => {
+    const nextSection = findNextIncompleteSection();
+    setActiveTab(nextSection);
+  };
+
+  // Animation classes for results section
   const resultsAnimationClass = showResults
     ? "w-2/5 transition-all duration-500 ease-in-out"
     : "w-0 opacity-0 transition-all duration-500 ease-in-out";
@@ -301,7 +336,7 @@ const ROICalculator: React.FC = () => {
                           id="annualSalary"
                           type="number" 
                           className="pl-8"
-                          placeholder="75000"
+                          placeholder="125000"
                           value={calculatorState.adminWaste.annualSalary === '' ? '' : calculatorState.adminWaste.annualSalary}
                           onChange={(e) => handleInputChange('adminWaste', 'annualSalary', e.target.value)}
                         />
@@ -313,7 +348,7 @@ const ROICalculator: React.FC = () => {
                       <Input 
                         id="hoursPerWeek"
                         type="number" 
-                        placeholder="5"
+                        placeholder="15"
                         value={calculatorState.adminWaste.hoursPerWeek === '' ? '' : calculatorState.adminWaste.hoursPerWeek}
                         onChange={(e) => handleInputChange('adminWaste', 'hoursPerWeek', e.target.value)}
                       />
@@ -324,7 +359,7 @@ const ROICalculator: React.FC = () => {
                       <Input 
                         id="numberOfMGOs"
                         type="number" 
-                        placeholder="10"
+                        placeholder="4"
                         value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : calculatorState.adminWaste.numberOfMGOs}
                         onChange={(e) => handleInputChange('adminWaste', 'numberOfMGOs', e.target.value)}
                       />
@@ -356,7 +391,7 @@ const ROICalculator: React.FC = () => {
                       <Input 
                         id="hoursWasted"
                         type="number" 
-                        placeholder="3"
+                        placeholder="5"
                         value={calculatorState.siloedCollaboration.hoursWasted === '' ? '' : calculatorState.siloedCollaboration.hoursWasted}
                         onChange={(e) => handleInputChange('siloedCollaboration', 'hoursWasted', e.target.value)}
                       />
@@ -367,7 +402,7 @@ const ROICalculator: React.FC = () => {
                       <Input 
                         id="numberOfUsers"
                         type="number" 
-                        placeholder="15"
+                        placeholder="2"
                         value={calculatorState.siloedCollaboration.numberOfUsers === '' ? '' : calculatorState.siloedCollaboration.numberOfUsers}
                         onChange={(e) => handleInputChange('siloedCollaboration', 'numberOfUsers', e.target.value)}
                       />
@@ -384,7 +419,7 @@ const ROICalculator: React.FC = () => {
                       <Input 
                         id="upgradableDonors"
                         type="number" 
-                        placeholder="100"
+                        placeholder="65"
                         value={calculatorState.missedUpgrades.upgradableDonors === '' ? '' : calculatorState.missedUpgrades.upgradableDonors}
                         onChange={(e) => handleInputChange('missedUpgrades', 'upgradableDonors', e.target.value)}
                       />
@@ -398,7 +433,7 @@ const ROICalculator: React.FC = () => {
                           id="averageGiftSize"
                           type="number" 
                           className="pl-8"
-                          placeholder="250"
+                          placeholder="10000"
                           value={calculatorState.missedUpgrades.averageGiftSize === '' ? '' : calculatorState.missedUpgrades.averageGiftSize}
                           onChange={(e) => handleInputChange('missedUpgrades', 'averageGiftSize', e.target.value)}
                         />
@@ -412,7 +447,7 @@ const ROICalculator: React.FC = () => {
                           <Input 
                             id="upgradePercentage"
                             type="number" 
-                            placeholder="15"
+                            placeholder="50"
                             value={calculatorState.missedUpgrades.upgradePercentage === '' ? '' : calculatorState.missedUpgrades.upgradePercentage}
                             onChange={(e) => handleInputChange('missedUpgrades', 'upgradePercentage', e.target.value)}
                           />
@@ -426,7 +461,7 @@ const ROICalculator: React.FC = () => {
                           <Input 
                             id="realizationRate"
                             type="number" 
-                            placeholder="25"
+                            placeholder="50"
                             value={calculatorState.missedUpgrades.realizationRate === '' ? '' : calculatorState.missedUpgrades.realizationRate}
                             onChange={(e) => handleInputChange('missedUpgrades', 'realizationRate', e.target.value)}
                           />
@@ -446,7 +481,7 @@ const ROICalculator: React.FC = () => {
                       <Input 
                         id="lapsedDonors"
                         type="number" 
-                        placeholder="50"
+                        placeholder="15"
                         value={calculatorState.donorLapse.lapsedDonors === '' ? '' : calculatorState.donorLapse.lapsedDonors}
                         onChange={(e) => handleInputChange('donorLapse', 'lapsedDonors', e.target.value)}
                       />
@@ -460,7 +495,7 @@ const ROICalculator: React.FC = () => {
                           id="donorAverageGift"
                           type="number" 
                           className="pl-8"
-                          placeholder="200"
+                          placeholder="10000"
                           value={calculatorState.donorLapse.averageGift === '' ? '' : calculatorState.donorLapse.averageGift}
                           onChange={(e) => handleInputChange('donorLapse', 'averageGift', e.target.value)}
                         />
@@ -468,17 +503,14 @@ const ROICalculator: React.FC = () => {
                     </div>
                     
                     <div className="space-y-2">
-                      <Label htmlFor="numberOfPortfolios">Number of Portfolios (%)</Label>
-                      <div className="relative">
-                        <Input 
-                          id="numberOfPortfolios"
-                          type="number" 
-                          placeholder="30"
-                          value={calculatorState.donorLapse.numberOfPortfolios === '' ? '' : calculatorState.donorLapse.numberOfPortfolios}
-                          onChange={(e) => handleInputChange('donorLapse', 'numberOfPortfolios', e.target.value)}
-                        />
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
-                      </div>
+                      <Label htmlFor="numberOfPortfolios">Number of Portfolios</Label>
+                      <Input 
+                        id="numberOfPortfolios"
+                        type="number" 
+                        placeholder="2"
+                        value={calculatorState.donorLapse.numberOfPortfolios === '' ? '' : calculatorState.donorLapse.numberOfPortfolios}
+                        onChange={(e) => handleInputChange('donorLapse', 'numberOfPortfolios', e.target.value)}
+                      />
                     </div>
                   </CardContent>
                 </Card>
@@ -486,16 +518,23 @@ const ROICalculator: React.FC = () => {
             </div>
           </Tabs>
           
-          {allSectionsCompleted && (
-            <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-center">
+            {allSectionsCompleted ? (
               <Button 
                 onClick={calculateImpact}
                 className="bg-gradient-to-r from-instil-purple to-purple-800 hover:from-instil-purple hover:to-purple-700 text-white px-8 py-2"
               >
                 Calculate ROI
               </Button>
-            </div>
-          )}
+            ) : (
+              <Button 
+                onClick={handleNextClick}
+                className="bg-gradient-to-r from-instil-purple to-purple-800 hover:from-instil-purple hover:to-purple-700 text-white px-8 py-2"
+              >
+                Next <ChevronRight size={16} className="ml-1" />
+              </Button>
+            )}
+          </div>
         </div>
         
         {showResults && (
