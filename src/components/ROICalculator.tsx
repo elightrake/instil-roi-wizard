@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,8 +47,22 @@ const formatCurrency = (value: number): string => {
   }).format(value);
 };
 
+// Helper function to format number with commas
+const formatNumber = (value: number | string): string => {
+  if (value === '') return '';
+  return new Intl.NumberFormat('en-US').format(Number(value));
+};
+
+// Helper function to parse formatted number input
+const parseFormattedNumber = (value: string): number | '' => {
+  if (value === '') return '';
+  // Remove all non-digit characters
+  const digitsOnly = value.replace(/[^\d]/g, '');
+  return digitsOnly === '' ? '' : Number(digitsOnly);
+};
+
 // Animated counter component with gradual slowdown
-const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 2000 }) => {
+const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value, duration = 1000 }) => {
   const [count, setCount] = useState(0);
   
   React.useEffect(() => {
@@ -141,28 +156,41 @@ const ROICalculator: React.FC = () => {
     );
   }, [calculatorState]);
 
+  // Calculate totals for the two categories
+  const wastedAnnualSalarySpend = React.useMemo(() => {
+    return calculatorState.adminWaste.impact + calculatorState.siloedCollaboration.impact;
+  }, [calculatorState.adminWaste.impact, calculatorState.siloedCollaboration.impact]);
+
+  const opportunityCost = React.useMemo(() => {
+    return calculatorState.missedUpgrades.impact + calculatorState.donorLapse.impact;
+  }, [calculatorState.missedUpgrades.impact, calculatorState.donorLapse.impact]);
+
   // Chart data
   const chartData = React.useMemo(() => {
     return [
       {
         name: 'Manual Admin Waste',
         value: calculatorState.adminWaste.impact,
-        color: '#6A1B9A' // Deep purple
+        color: '#6A1B9A', // Deep purple
+        category: 'Wasted Annual Salary Spend'
       },
       {
         name: 'Siloed Collaboration',
         value: calculatorState.siloedCollaboration.impact,
-        color: '#8E24AA' // Medium purple
+        color: '#8E24AA', // Medium purple
+        category: 'Wasted Annual Salary Spend'
       },
       {
         name: 'Missed Upgrades',
         value: calculatorState.missedUpgrades.impact,
-        color: '#AB47BC' // Light purple
+        color: '#AB47BC', // Light purple
+        category: 'Opportunity Cost'
       },
       {
         name: 'Donor Lapse',
         value: calculatorState.donorLapse.impact,
-        color: '#42F2F7' // Aqua
+        color: '#42F2F7', // Aqua
+        category: 'Opportunity Cost'
       }
     ].filter(item => item.value > 0);
   }, [calculatorState]);
@@ -213,7 +241,7 @@ const ROICalculator: React.FC = () => {
     field: string,
     value: string
   ) => {
-    const numValue = value === '' ? '' : parseFloat(value);
+    const numValue = parseFormattedNumber(value);
     
     setCalculatorState((prev) => ({
       ...prev,
@@ -331,10 +359,10 @@ const ROICalculator: React.FC = () => {
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                         <Input 
                           id="annualSalary"
-                          type="number" 
+                          type="text" 
                           className="pl-8"
-                          placeholder="125000"
-                          value={calculatorState.adminWaste.annualSalary === '' ? '' : calculatorState.adminWaste.annualSalary}
+                          placeholder="125,000"
+                          value={calculatorState.adminWaste.annualSalary === '' ? '' : formatNumber(calculatorState.adminWaste.annualSalary)}
                           onChange={(e) => handleInputChange('adminWaste', 'annualSalary', e.target.value)}
                         />
                       </div>
@@ -344,9 +372,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="hoursPerWeek">Hours Per Week Saved</Label>
                       <Input 
                         id="hoursPerWeek"
-                        type="number" 
+                        type="text" 
                         placeholder="15"
-                        value={calculatorState.adminWaste.hoursPerWeek === '' ? '' : calculatorState.adminWaste.hoursPerWeek}
+                        value={calculatorState.adminWaste.hoursPerWeek === '' ? '' : formatNumber(calculatorState.adminWaste.hoursPerWeek)}
                         onChange={(e) => handleInputChange('adminWaste', 'hoursPerWeek', e.target.value)}
                       />
                     </div>
@@ -355,9 +383,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="numberOfMGOs">Number of MGOs</Label>
                       <Input 
                         id="numberOfMGOs"
-                        type="number" 
+                        type="text" 
                         placeholder="4"
-                        value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : calculatorState.adminWaste.numberOfMGOs}
+                        value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : formatNumber(calculatorState.adminWaste.numberOfMGOs)}
                         onChange={(e) => handleInputChange('adminWaste', 'numberOfMGOs', e.target.value)}
                       />
                     </div>
@@ -374,10 +402,10 @@ const ROICalculator: React.FC = () => {
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                         <Input 
                           id="scAnnualSalary"
-                          type="number" 
+                          type="text" 
                           className="pl-8"
-                          placeholder="75000"
-                          value={calculatorState.siloedCollaboration.annualSalary === '' ? '' : calculatorState.siloedCollaboration.annualSalary}
+                          placeholder="75,000"
+                          value={calculatorState.siloedCollaboration.annualSalary === '' ? '' : formatNumber(calculatorState.siloedCollaboration.annualSalary)}
                           onChange={(e) => handleInputChange('siloedCollaboration', 'annualSalary', e.target.value)}
                         />
                       </div>
@@ -387,9 +415,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="hoursWasted">Hours Wasted Per Week</Label>
                       <Input 
                         id="hoursWasted"
-                        type="number" 
+                        type="text" 
                         placeholder="5"
-                        value={calculatorState.siloedCollaboration.hoursWasted === '' ? '' : calculatorState.siloedCollaboration.hoursWasted}
+                        value={calculatorState.siloedCollaboration.hoursWasted === '' ? '' : formatNumber(calculatorState.siloedCollaboration.hoursWasted)}
                         onChange={(e) => handleInputChange('siloedCollaboration', 'hoursWasted', e.target.value)}
                       />
                     </div>
@@ -398,9 +426,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="numberOfUsers">Number of Users</Label>
                       <Input 
                         id="numberOfUsers"
-                        type="number" 
+                        type="text" 
                         placeholder="2"
-                        value={calculatorState.siloedCollaboration.numberOfUsers === '' ? '' : calculatorState.siloedCollaboration.numberOfUsers}
+                        value={calculatorState.siloedCollaboration.numberOfUsers === '' ? '' : formatNumber(calculatorState.siloedCollaboration.numberOfUsers)}
                         onChange={(e) => handleInputChange('siloedCollaboration', 'numberOfUsers', e.target.value)}
                       />
                     </div>
@@ -415,9 +443,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="upgradableDonors">Number of Upgradable Donors</Label>
                       <Input 
                         id="upgradableDonors"
-                        type="number" 
+                        type="text" 
                         placeholder="65"
-                        value={calculatorState.missedUpgrades.upgradableDonors === '' ? '' : calculatorState.missedUpgrades.upgradableDonors}
+                        value={calculatorState.missedUpgrades.upgradableDonors === '' ? '' : formatNumber(calculatorState.missedUpgrades.upgradableDonors)}
                         onChange={(e) => handleInputChange('missedUpgrades', 'upgradableDonors', e.target.value)}
                       />
                     </div>
@@ -428,10 +456,10 @@ const ROICalculator: React.FC = () => {
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                         <Input 
                           id="averageGiftSize"
-                          type="number" 
+                          type="text" 
                           className="pl-8"
-                          placeholder="10000"
-                          value={calculatorState.missedUpgrades.averageGiftSize === '' ? '' : calculatorState.missedUpgrades.averageGiftSize}
+                          placeholder="10,000"
+                          value={calculatorState.missedUpgrades.averageGiftSize === '' ? '' : formatNumber(calculatorState.missedUpgrades.averageGiftSize)}
                           onChange={(e) => handleInputChange('missedUpgrades', 'averageGiftSize', e.target.value)}
                         />
                       </div>
@@ -443,9 +471,9 @@ const ROICalculator: React.FC = () => {
                         <div className="relative">
                           <Input 
                             id="upgradePercentage"
-                            type="number" 
+                            type="text" 
                             placeholder="50"
-                            value={calculatorState.missedUpgrades.upgradePercentage === '' ? '' : calculatorState.missedUpgrades.upgradePercentage}
+                            value={calculatorState.missedUpgrades.upgradePercentage === '' ? '' : formatNumber(calculatorState.missedUpgrades.upgradePercentage)}
                             onChange={(e) => handleInputChange('missedUpgrades', 'upgradePercentage', e.target.value)}
                           />
                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
@@ -457,9 +485,9 @@ const ROICalculator: React.FC = () => {
                         <div className="relative">
                           <Input 
                             id="realizationRate"
-                            type="number" 
+                            type="text" 
                             placeholder="50"
-                            value={calculatorState.missedUpgrades.realizationRate === '' ? '' : calculatorState.missedUpgrades.realizationRate}
+                            value={calculatorState.missedUpgrades.realizationRate === '' ? '' : formatNumber(calculatorState.missedUpgrades.realizationRate)}
                             onChange={(e) => handleInputChange('missedUpgrades', 'realizationRate', e.target.value)}
                           />
                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
@@ -477,9 +505,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="lapsedDonors">Number of Lapsed Donors</Label>
                       <Input 
                         id="lapsedDonors"
-                        type="number" 
+                        type="text" 
                         placeholder="15"
-                        value={calculatorState.donorLapse.lapsedDonors === '' ? '' : calculatorState.donorLapse.lapsedDonors}
+                        value={calculatorState.donorLapse.lapsedDonors === '' ? '' : formatNumber(calculatorState.donorLapse.lapsedDonors)}
                         onChange={(e) => handleInputChange('donorLapse', 'lapsedDonors', e.target.value)}
                       />
                     </div>
@@ -490,10 +518,10 @@ const ROICalculator: React.FC = () => {
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                         <Input 
                           id="donorAverageGift"
-                          type="number" 
+                          type="text" 
                           className="pl-8"
-                          placeholder="10000"
-                          value={calculatorState.donorLapse.averageGift === '' ? '' : calculatorState.donorLapse.averageGift}
+                          placeholder="10,000"
+                          value={calculatorState.donorLapse.averageGift === '' ? '' : formatNumber(calculatorState.donorLapse.averageGift)}
                           onChange={(e) => handleInputChange('donorLapse', 'averageGift', e.target.value)}
                         />
                       </div>
@@ -503,9 +531,9 @@ const ROICalculator: React.FC = () => {
                       <Label htmlFor="numberOfPortfolios">Number of Portfolios</Label>
                       <Input 
                         id="numberOfPortfolios"
-                        type="number" 
+                        type="text" 
                         placeholder="2"
-                        value={calculatorState.donorLapse.numberOfPortfolios === '' ? '' : calculatorState.donorLapse.numberOfPortfolios}
+                        value={calculatorState.donorLapse.numberOfPortfolios === '' ? '' : formatNumber(calculatorState.donorLapse.numberOfPortfolios)}
                         onChange={(e) => handleInputChange('donorLapse', 'numberOfPortfolios', e.target.value)}
                       />
                     </div>
@@ -547,8 +575,6 @@ const ROICalculator: React.FC = () => {
               </div>
               
               <div className="flex-1 flex flex-col">
-                <h3 className="text-md font-medium mb-2">Impact Breakdown</h3>
-                
                 <div className="flex-1" style={{ minHeight: "200px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -570,19 +596,68 @@ const ROICalculator: React.FC = () => {
                   </ResponsiveContainer>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  {chartData.map((entry, index) => (
-                    <div key={index} className="flex items-center">
-                      <div 
-                        className="w-3 h-3 rounded-full mr-2" 
-                        style={{ backgroundColor: entry.color }}
-                      ></div>
-                      <div className="text-xs">
-                        <div>{entry.name}</div>
-                        <div className="font-medium">{formatCurrency(entry.value)}</div>
+                <div className="mt-4">
+                  {/* Wasted Annual Salary Spend Section */}
+                  <div className="mb-3">
+                    <h3 className="text-md font-semibold mb-2">1. Wasted Annual Salary Spend</h3>
+                    <div className="grid grid-cols-1 gap-1">
+                      {chartData
+                        .filter(item => item.category === 'Wasted Annual Salary Spend')
+                        .map((entry, index) => (
+                          <div key={index} className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div 
+                                className="w-3 h-3 rounded-full mr-2" 
+                                style={{ backgroundColor: entry.color }}
+                              ></div>
+                              <div className="text-xs">
+                                {entry.name}
+                              </div>
+                            </div>
+                            <div className="text-xs font-medium">
+                              {formatCurrency(entry.value)}
+                            </div>
+                          </div>
+                        ))}
+                      <div className="flex items-center justify-between mt-1 border-t pt-1">
+                        <div className="text-xs font-medium">Total</div>
+                        <div className="text-xs font-semibold">
+                          {formatCurrency(wastedAnnualSalarySpend)}
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  
+                  {/* Opportunity Cost Section */}
+                  <div>
+                    <h3 className="text-md font-semibold mb-2">2. Opportunity Cost</h3>
+                    <div className="grid grid-cols-1 gap-1">
+                      {chartData
+                        .filter(item => item.category === 'Opportunity Cost')
+                        .map((entry, index) => (
+                          <div key={index} className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div 
+                                className="w-3 h-3 rounded-full mr-2" 
+                                style={{ backgroundColor: entry.color }}
+                              ></div>
+                              <div className="text-xs">
+                                {entry.name}
+                              </div>
+                            </div>
+                            <div className="text-xs font-medium">
+                              {formatCurrency(entry.value)}
+                            </div>
+                          </div>
+                        ))}
+                      <div className="flex items-center justify-between mt-1 border-t pt-1">
+                        <div className="text-xs font-medium">Total</div>
+                        <div className="text-xs font-semibold">
+                          {formatCurrency(opportunityCost)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
