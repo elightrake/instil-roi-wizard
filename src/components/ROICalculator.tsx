@@ -105,8 +105,8 @@ const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-2 border border-gray-200 rounded shadow-sm">
-        <p className="font-medium text-gray-900">{payload[0].name}</p>
+      <div className="bg-white p-1 border border-gray-200 rounded shadow-sm text-xs" style={{ maxWidth: '120px' }}>
+        <p className="font-medium text-gray-900 truncate">{payload[0].name}</p>
         <p className="text-instil-purple font-semibold">{formatCurrency(payload[0].value as number)}</p>
       </div>
     );
@@ -565,19 +565,19 @@ const ROICalculator: React.FC = () => {
         {showResults && (
           <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-4 overflow-hidden`}>
             <div className="h-full flex flex-col">
-              {/* Breakdown Details - Now at the top */}
-              <div className="mb-4">
+              {/* Impact Breakdown - More compact with less vertical spacing */}
+              <div className="mb-2 space-y-1">
                 {/* Wasted Annual Salary Spend Section */}
-                <div className="mb-3">
-                  <h3 className="text-md font-semibold mb-2">Wasted Annual Salary Spend</h3>
-                  <div className="grid grid-cols-1 gap-1">
+                <div className="mb-2">
+                  <h3 className="text-sm font-semibold">Wasted Annual Salary Spend</h3>
+                  <div className="grid grid-cols-1 gap-0.5">
                     {chartData
                       .filter(item => item.category === 'Wasted Annual Salary Spend')
                       .map((entry, index) => (
                         <div key={index} className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div 
-                              className="w-3 h-3 rounded-full mr-2" 
+                              className="w-2 h-2 rounded-full mr-2" 
                               style={{ backgroundColor: entry.color }}
                             ></div>
                             <div className="text-xs">
@@ -589,7 +589,7 @@ const ROICalculator: React.FC = () => {
                           </div>
                         </div>
                       ))}
-                    <div className="flex items-center justify-between mt-1 border-t pt-1">
+                    <div className="flex items-center justify-between mt-0.5 pt-0.5 border-t border-gray-100">
                       <div className="text-xs font-medium">Total</div>
                       <div className="text-xs font-semibold">
                         {formatCurrency(wastedAnnualSalarySpend)}
@@ -600,15 +600,15 @@ const ROICalculator: React.FC = () => {
                 
                 {/* Opportunity Cost Section */}
                 <div>
-                  <h3 className="text-md font-semibold mb-2">Opportunity Cost</h3>
-                  <div className="grid grid-cols-1 gap-1">
+                  <h3 className="text-sm font-semibold">Opportunity Cost</h3>
+                  <div className="grid grid-cols-1 gap-0.5">
                     {chartData
                       .filter(item => item.category === 'Opportunity Cost')
                       .map((entry, index) => (
                         <div key={index} className="flex items-center justify-between">
                           <div className="flex items-center">
                             <div 
-                              className="w-3 h-3 rounded-full mr-2" 
+                              className="w-2 h-2 rounded-full mr-2" 
                               style={{ backgroundColor: entry.color }}
                             ></div>
                             <div className="text-xs">
@@ -620,7 +620,7 @@ const ROICalculator: React.FC = () => {
                           </div>
                         </div>
                       ))}
-                    <div className="flex items-center justify-between mt-1 border-t pt-1">
+                    <div className="flex items-center justify-between mt-0.5 pt-0.5 border-t border-gray-100">
                       <div className="text-xs font-medium">Total</div>
                       <div className="text-xs font-semibold">
                         {formatCurrency(opportunityCost)}
@@ -630,18 +630,18 @@ const ROICalculator: React.FC = () => {
                 </div>
               </div>
               
-              {/* Total Impact and Chart - Now at the bottom, side by side */}
-              <div className="mt-auto flex flex-row items-center gap-4 pt-4 border-t">
+              {/* Total Impact and Chart - Reduced margins and compact display */}
+              <div className="mt-auto flex flex-row items-center gap-2 pt-2 border-t">
                 <div className="flex-1">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-instil-purple">
+                    <div className="text-2xl font-bold text-instil-purple">
                       <AnimatedCounter value={totalImpact} />
                     </div>
-                    <p className="text-sm text-gray-600 mt-1">Potential Annual Impact</p>
+                    <p className="text-xs text-gray-600">Potential Annual Impact</p>
                   </div>
                 </div>
                 
-                <div className="flex-1" style={{ height: "120px" }}>
+                <div className="flex-1" style={{ height: "100px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -649,7 +649,7 @@ const ROICalculator: React.FC = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={50}
+                        outerRadius={40}
                         fill="#8884d8"
                         dataKey="value"
                       >
