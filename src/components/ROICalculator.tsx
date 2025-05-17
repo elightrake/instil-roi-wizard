@@ -666,7 +666,7 @@ const ROICalculator: React.FC = () => {
                 
                 {/* Opportunity Cost Section */}
                 <div className="mb-3">
-                  <h3 className="mt-4 text-sm font-semibold mb-2">Opportunity Cost</h3>
+                  <h3 className="mt-8 text-sm font-semibold mb-2">Opportunity Cost</h3>
                   <div className="grid grid-cols-1 gap-1">
                     {chartData
                       .filter(item => item.category === 'Opportunity Cost')
