@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -673,18 +672,4 @@ const ROICalculator: React.FC = () => {
   );
 };
 
-// CustomTooltip component is the same
-const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white p-1 border border-gray-200 rounded shadow-sm text-xs" style={{ maxWidth: '100px' }}>
-        <p className="font-medium text-gray-900 truncate">{payload[0].name}</p>
-        <p className="text-instil-purple font-semibold">{formatCurrency(payload[0].value as number)}</p>
-      </div>
-    );
-  }
-  return null;
-};
-
 export default ROICalculator;
-
