@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -361,7 +362,8 @@ const ROICalculator: React.FC = () => {
             onValueChange={(value) => setActiveTab(value)}
             className="w-full"
           >
-            <TabsList className={`grid grid-cols-2 md:grid-cols-4 mb-4 bg-instil-light ${isMobile ? 'text-xs' : ''}`}>
+            {/* Fixed TabsList to ensure all tabs get proper styling on mobile */}
+            <TabsList className={`grid ${isMobile ? 'grid-cols-2 gap-1' : 'grid-cols-4'} mb-4 bg-instil-light ${isMobile ? 'text-xs' : ''}`}>
               <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                 Admin Waste
               </TabsTrigger>
