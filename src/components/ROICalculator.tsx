@@ -309,31 +309,59 @@ const ROICalculator: React.FC = () => {
     setActiveTab(nextSection);
   };
 
-  // Animation classes for results section
+  // Check if we're on a mobile device using a media query
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Set initial state based on window width
+    setIsMobile(window.innerWidth < 768);
+
+    // Create a media query listener
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    
+    // Define handler function
+    const handleMediaQueryChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+    
+    // Add the listener
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+    
+    // Cleanup
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  }, []);
+
+  // Animation classes - adjusted for mobile
   const resultsAnimationClass = showResults
-    ? "w-2/5 transition-all duration-500 ease-in-out"
+    ? isMobile 
+      ? "w-full mt-6 transition-all duration-500 ease-in-out"
+      : "w-2/5 transition-all duration-500 ease-in-out" 
     : "w-0 opacity-0 transition-all duration-500 ease-in-out";
 
-  // Animation class for calculator section
-  const calculatorAnimationClass = showResults
-    ? "w-3/5 transition-all duration-500 ease-in-out"
-    : "w-full transition-all duration-500 ease-in-out";
+  // Animation class for calculator section - adjusted for mobile
+  const calculatorAnimationClass = isMobile 
+    ? "w-full transition-all duration-500 ease-in-out"
+    : showResults
+      ? "w-3/5 transition-all duration-500 ease-in-out"
+      : "w-full transition-all duration-500 ease-in-out";
 
   return (
-    <div className="max-w-[1000px] max-h-[600px] mx-auto bg-white rounded-lg shadow-lg p-6 flex flex-col">
-      <header className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-instil-purple">Instil ROI Calculator</h1>
-        <p className="text-gray-600">See how much your organization could save</p>
+    <div className="max-w-[1000px] mx-auto bg-white rounded-lg shadow-lg p-3 md:p-6 flex flex-col max-h-full md:max-h-[600px] overflow-auto">
+      <header className="text-center mb-4 md:mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-instil-purple">Instil ROI Calculator</h1>
+        <p className="text-gray-600 text-sm md:text-base">See how much your organization could save</p>
       </header>
       
-      <div className="flex flex-1 gap-6">
-        <div className={`${calculatorAnimationClass} bg-gray-50 rounded-lg p-4 shadow-sm`}>
+      <div className={`flex flex-col md:flex-row flex-1 ${isMobile ? 'gap-4' : 'gap-6'}`}>
+        <div className={`${calculatorAnimationClass} bg-gray-50 rounded-lg p-3 md:p-4 shadow-sm`}>
           <Tabs 
             value={activeTab} 
             onValueChange={(value) => setActiveTab(value)}
             className="w-full"
           >
-            <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
+            <TabsList className={`grid grid-cols-2 md:grid-cols-4 mb-4 bg-instil-light ${isMobile ? 'text-xs' : ''}`}>
               <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                 Admin Waste
               </TabsTrigger>
@@ -562,7 +590,7 @@ const ROICalculator: React.FC = () => {
         </div>
         
         {showResults && (
-          <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-4 overflow-hidden`}>
+          <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-3 md:p-4 overflow-hidden`}>
             <div className="h-full flex flex-col">
               {/* Impact Breakdown - Expanded with more vertical space */}
               <div className="flex-grow space-y-3">
@@ -598,7 +626,7 @@ const ROICalculator: React.FC = () => {
                 </div>
                 
                 {/* Add more spacing here between the sections */}
-                <div className="my-4"></div>
+                <div className="my-6"></div>
                 
                 {/* Opportunity Cost Section */}
                 <div className="mb-3">
@@ -632,18 +660,18 @@ const ROICalculator: React.FC = () => {
                 </div>
               </div>
               
-              {/* Total Impact and Chart - Reduced margins and compact display */}
-              <div className="flex flex-row items-center gap-2 pt-2 border-t mt-auto">
-                <div className="flex-1">
+              {/* Total Impact and Chart - Adjusted for mobile */}
+              <div className={`flex ${isMobile ? 'flex-col items-center' : 'flex-row items-center'} gap-2 pt-2 border-t mt-auto`}>
+                <div className={`${isMobile ? 'w-full' : 'flex-1'}`}>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-instil-purple">
+                    <div className="text-3xl md:text-4xl font-bold text-instil-purple">
                       <AnimatedCounter value={totalImpact} />
                     </div>
                     <p className="text-xs text-gray-600">Potential Annual Impact</p>
                   </div>
                 </div>
                 
-                <div className="flex-1" style={{ height: "90px" }}>
+                <div className={`${isMobile ? 'w-full h-[120px]' : 'flex-1 h-[90px]'}`}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -651,7 +679,7 @@ const ROICalculator: React.FC = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={40}
+                        outerRadius={isMobile ? 50 : 40}
                         fill="#8884d8"
                         dataKey="value"
                       >
