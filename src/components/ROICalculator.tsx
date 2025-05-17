@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -241,19 +240,17 @@ const ROICalculator: React.FC = () => {
       Number(calculatorState.siloedCollaboration.numberOfUsers);
     
     // Calculate Missed Upgrades Impact
-    const upgradeAmount = Number(calculatorState.missedUpgrades.averageGiftSize) * 
-      (Number(calculatorState.missedUpgrades.upgradePercentage) / 100);
-    
-    const successfulUpgrades = Number(calculatorState.missedUpgrades.upgradableDonors) * 
+    const missedUpgradesImpact = 
+      Number(calculatorState.missedUpgrades.upgradableDonors) * 
+      Number(calculatorState.missedUpgrades.averageGiftSize) * 
+      (Number(calculatorState.missedUpgrades.upgradePercentage) / 100) * 
       (Number(calculatorState.missedUpgrades.realizationRate) / 100);
     
-    const missedUpgradesImpact = upgradeAmount * successfulUpgrades * 12;
-    
     // Calculate Donor Lapse Impact
-    const annualValue = Number(calculatorState.donorLapse.averageGift) * 12;
+    const lostDonorValue = Number(calculatorState.donorLapse.lapsedDonors) * 
+      Number(calculatorState.donorLapse.averageGift);
     
-    const donorLapseImpact = annualValue * Number(calculatorState.donorLapse.lapsedDonors) * 
-      (Number(calculatorState.donorLapse.numberOfPortfolios) / 100);
+    const donorLapseImpact = lostDonorValue * Number(calculatorState.donorLapse.numberOfPortfolios);
     
     setCalculatorState((prev) => ({
       ...prev,
