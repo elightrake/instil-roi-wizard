@@ -365,7 +365,8 @@ const ROICalculator: React.FC = () => {
             {/* Mobile tabs with proper background */}
             {isMobile ? (
               <div className="w-full bg-instil-light rounded-md p-1 mb-6">
-                <div className="flex flex-wrap w-full">
+                {/* Instead of custom div structure, use TabsList for both rows to maintain proper structure */}
+                <TabsList className="flex w-full mb-1 bg-transparent">
                   <TabsTrigger 
                     value="adminWaste" 
                     className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
@@ -378,8 +379,8 @@ const ROICalculator: React.FC = () => {
                   >
                     Siloed Collab
                   </TabsTrigger>
-                </div>
-                <div className="flex flex-wrap w-full mt-1">
+                </TabsList>
+                <TabsList className="flex w-full bg-transparent">
                   <TabsTrigger 
                     value="missedUpgrades" 
                     className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
@@ -392,7 +393,7 @@ const ROICalculator: React.FC = () => {
                   >
                     Donor Lapse
                   </TabsTrigger>
-                </div>
+                </TabsList>
               </div>
             ) : (
               <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
