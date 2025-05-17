@@ -565,17 +565,15 @@ const ROICalculator: React.FC = () => {
         {showResults && (
           <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-4 overflow-hidden`}>
             <div className="h-full flex flex-col">
-              <h2 className="text-lg font-semibold text-instil-purple">Potential Annual Impact</h2>
-              
-              <div className="text-center my-6">
-                <div className="text-3xl font-bold text-instil-purple">
-                  <AnimatedCounter value={totalImpact} />
+              <div className="flex flex-row items-center mb-6">
+                <div className="text-center flex-1">
+                  <div className="text-3xl font-bold text-instil-purple">
+                    <AnimatedCounter value={totalImpact} />
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">Potential Annual Impact</p>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">Estimated Annual Value</p>
-              </div>
-              
-              <div className="flex-1 flex flex-col">
-                <div className="flex-1" style={{ minHeight: "200px" }}>
+                
+                <div className="flex-1" style={{ minHeight: "160px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -583,7 +581,7 @@ const ROICalculator: React.FC = () => {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        outerRadius={80}
+                        outerRadius={60}
                         fill="#8884d8"
                         dataKey="value"
                       >
@@ -595,66 +593,66 @@ const ROICalculator: React.FC = () => {
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
-                
-                <div className="mt-4">
-                  {/* Wasted Annual Salary Spend Section */}
-                  <div className="mb-3">
-                    <h3 className="text-md font-semibold mb-2">1. Wasted Annual Salary Spend</h3>
-                    <div className="grid grid-cols-1 gap-1">
-                      {chartData
-                        .filter(item => item.category === 'Wasted Annual Salary Spend')
-                        .map((entry, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <div 
-                                className="w-3 h-3 rounded-full mr-2" 
-                                style={{ backgroundColor: entry.color }}
-                              ></div>
-                              <div className="text-xs">
-                                {entry.name}
-                              </div>
-                            </div>
-                            <div className="text-xs font-medium">
-                              {formatCurrency(entry.value)}
+              </div>
+              
+              <div className="mt-2">
+                {/* Wasted Annual Salary Spend Section */}
+                <div className="mb-3">
+                  <h3 className="text-md font-semibold mb-2">Wasted Annual Salary Spend</h3>
+                  <div className="grid grid-cols-1 gap-1">
+                    {chartData
+                      .filter(item => item.category === 'Wasted Annual Salary Spend')
+                      .map((entry, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div 
+                              className="w-3 h-3 rounded-full mr-2" 
+                              style={{ backgroundColor: entry.color }}
+                            ></div>
+                            <div className="text-xs">
+                              {entry.name}
                             </div>
                           </div>
-                        ))}
-                      <div className="flex items-center justify-between mt-1 border-t pt-1">
-                        <div className="text-xs font-medium">Total</div>
-                        <div className="text-xs font-semibold">
-                          {formatCurrency(wastedAnnualSalarySpend)}
+                          <div className="text-xs font-medium">
+                            {formatCurrency(entry.value)}
+                          </div>
                         </div>
+                      ))}
+                    <div className="flex items-center justify-between mt-1 border-t pt-1">
+                      <div className="text-xs font-medium">Total</div>
+                      <div className="text-xs font-semibold">
+                        {formatCurrency(wastedAnnualSalarySpend)}
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Opportunity Cost Section */}
-                  <div>
-                    <h3 className="text-md font-semibold mb-2">2. Opportunity Cost</h3>
-                    <div className="grid grid-cols-1 gap-1">
-                      {chartData
-                        .filter(item => item.category === 'Opportunity Cost')
-                        .map((entry, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <div 
-                                className="w-3 h-3 rounded-full mr-2" 
-                                style={{ backgroundColor: entry.color }}
-                              ></div>
-                              <div className="text-xs">
-                                {entry.name}
-                              </div>
-                            </div>
-                            <div className="text-xs font-medium">
-                              {formatCurrency(entry.value)}
+                </div>
+                
+                {/* Opportunity Cost Section */}
+                <div>
+                  <h3 className="text-md font-semibold mb-2">Opportunity Cost</h3>
+                  <div className="grid grid-cols-1 gap-1">
+                    {chartData
+                      .filter(item => item.category === 'Opportunity Cost')
+                      .map((entry, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <div 
+                              className="w-3 h-3 rounded-full mr-2" 
+                              style={{ backgroundColor: entry.color }}
+                            ></div>
+                            <div className="text-xs">
+                              {entry.name}
                             </div>
                           </div>
-                        ))}
-                      <div className="flex items-center justify-between mt-1 border-t pt-1">
-                        <div className="text-xs font-medium">Total</div>
-                        <div className="text-xs font-semibold">
-                          {formatCurrency(opportunityCost)}
+                          <div className="text-xs font-medium">
+                            {formatCurrency(entry.value)}
+                          </div>
                         </div>
+                      ))}
+                    <div className="flex items-center justify-between mt-1 border-t pt-1">
+                      <div className="text-xs font-medium">Total</div>
+                      <div className="text-xs font-semibold">
+                        {formatCurrency(opportunityCost)}
                       </div>
                     </div>
                   </div>
