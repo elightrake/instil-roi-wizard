@@ -700,7 +700,7 @@ const ROICalculator: React.FC = () => {
               <div className={`flex ${isMobile ? 'flex-col items-center' : 'flex-row items-center'} gap-2 pt-2 border-t mt-auto`}>
                 <div className={`${isMobile ? 'w-full' : 'flex-1'}`}>
                   <div className="text-center">
-                    <div className="text-3xl md:text-4xl font-bold text-instil-purple">
+                    <div className="mt-2 text-3xl md:text-4xl font-bold text-instil-purple">
                       <AnimatedCounter value={totalImpact} />
                     </div>
                     <p className="text-xs text-gray-600">Potential Annual Impact</p>
