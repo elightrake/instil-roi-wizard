@@ -598,6 +598,9 @@ const ROICalculator: React.FC = () => {
                   </div>
                 </div>
                 
+                {/* Add more spacing here between the sections */}
+                <div className="my-4"></div>
+                
                 {/* Opportunity Cost Section */}
                 <div className="mb-3">
                   <h3 className="text-sm font-semibold mb-2">Opportunity Cost</h3>
@@ -634,7 +637,7 @@ const ROICalculator: React.FC = () => {
               <div className="flex flex-row items-center gap-2 pt-2 border-t mt-auto">
                 <div className="flex-1">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-instil-purple">
+                    <div className="text-3xl font-bold text-instil-purple">
                       <AnimatedCounter value={totalImpact} />
                     </div>
                     <p className="text-xs text-gray-600">Potential Annual Impact</p>
@@ -670,4 +673,18 @@ const ROICalculator: React.FC = () => {
   );
 };
 
+// CustomTooltip component is the same
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-1 border border-gray-200 rounded shadow-sm text-xs" style={{ maxWidth: '100px' }}>
+        <p className="font-medium text-gray-900 truncate">{payload[0].name}</p>
+        <p className="text-instil-purple font-semibold">{formatCurrency(payload[0].value as number)}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default ROICalculator;
+
