@@ -105,7 +105,7 @@ const AnimatedCounter: React.FC<{ value: number; duration?: number }> = ({ value
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-1 border border-gray-200 rounded shadow-sm text-xs" style={{ maxWidth: '120px' }}>
+      <div className="bg-white p-1 border border-gray-200 rounded shadow-sm text-xs" style={{ maxWidth: '100px' }}>
         <p className="font-medium text-gray-900 truncate">{payload[0].name}</p>
         <p className="text-instil-purple font-semibold">{formatCurrency(payload[0].value as number)}</p>
       </div>
@@ -565,16 +565,16 @@ const ROICalculator: React.FC = () => {
         {showResults && (
           <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-4 overflow-hidden`}>
             <div className="h-full flex flex-col">
-              {/* Impact Breakdown - More compact with less vertical spacing */}
-              <div className="mb-2 space-y-1">
+              {/* Impact Breakdown - Expanded with more vertical space */}
+              <div className="flex-grow space-y-3">
                 {/* Wasted Annual Salary Spend Section */}
-                <div className="mb-2">
-                  <h3 className="text-sm font-semibold">Wasted Annual Salary Spend</h3>
-                  <div className="grid grid-cols-1 gap-0.5">
+                <div className="mb-3">
+                  <h3 className="text-sm font-semibold mb-2">Wasted Annual Salary Spend</h3>
+                  <div className="grid grid-cols-1 gap-1">
                     {chartData
                       .filter(item => item.category === 'Wasted Annual Salary Spend')
                       .map((entry, index) => (
-                        <div key={index} className="flex items-center justify-between">
+                        <div key={index} className="flex items-center justify-between py-1">
                           <div className="flex items-center">
                             <div 
                               className="w-2 h-2 rounded-full mr-2" 
@@ -589,7 +589,7 @@ const ROICalculator: React.FC = () => {
                           </div>
                         </div>
                       ))}
-                    <div className="flex items-center justify-between mt-0.5 pt-0.5 border-t border-gray-100">
+                    <div className="flex items-center justify-between mt-1 pt-1 border-t border-gray-100">
                       <div className="text-xs font-medium">Total</div>
                       <div className="text-xs font-semibold">
                         {formatCurrency(wastedAnnualSalarySpend)}
@@ -599,13 +599,13 @@ const ROICalculator: React.FC = () => {
                 </div>
                 
                 {/* Opportunity Cost Section */}
-                <div>
-                  <h3 className="text-sm font-semibold">Opportunity Cost</h3>
-                  <div className="grid grid-cols-1 gap-0.5">
+                <div className="mb-3">
+                  <h3 className="text-sm font-semibold mb-2">Opportunity Cost</h3>
+                  <div className="grid grid-cols-1 gap-1">
                     {chartData
                       .filter(item => item.category === 'Opportunity Cost')
                       .map((entry, index) => (
-                        <div key={index} className="flex items-center justify-between">
+                        <div key={index} className="flex items-center justify-between py-1">
                           <div className="flex items-center">
                             <div 
                               className="w-2 h-2 rounded-full mr-2" 
@@ -620,7 +620,7 @@ const ROICalculator: React.FC = () => {
                           </div>
                         </div>
                       ))}
-                    <div className="flex items-center justify-between mt-0.5 pt-0.5 border-t border-gray-100">
+                    <div className="flex items-center justify-between mt-1 pt-1 border-t border-gray-100">
                       <div className="text-xs font-medium">Total</div>
                       <div className="text-xs font-semibold">
                         {formatCurrency(opportunityCost)}
@@ -631,7 +631,7 @@ const ROICalculator: React.FC = () => {
               </div>
               
               {/* Total Impact and Chart - Reduced margins and compact display */}
-              <div className="mt-auto flex flex-row items-center gap-2 pt-2 border-t">
+              <div className="flex flex-row items-center gap-2 pt-2 border-t mt-auto">
                 <div className="flex-1">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-instil-purple">
@@ -641,7 +641,7 @@ const ROICalculator: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex-1" style={{ height: "100px" }}>
+                <div className="flex-1" style={{ height: "90px" }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
