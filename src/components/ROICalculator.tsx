@@ -120,28 +120,28 @@ const ROICalculator: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const [calculatorState, setCalculatorState] = useState<CalculatorState>({
     adminWaste: {
-      annualSalary: 125000,
-      hoursPerWeek: 15,
-      numberOfMGOs: 4,
+      annualSalary: '',
+      hoursPerWeek: '',
+      numberOfMGOs: '',
       impact: 0,
     },
     siloedCollaboration: {
-      annualSalary: 75000,
-      hoursWasted: 5,
-      numberOfUsers: 2,
+      annualSalary: '',
+      hoursWasted: '',
+      numberOfUsers: '',
       impact: 0,
     },
     missedUpgrades: {
-      upgradableDonors: 65,
-      averageGiftSize: 10000,
-      upgradePercentage: 50,
-      realizationRate: 50,
+      upgradableDonors: '',
+      averageGiftSize: '',
+      upgradePercentage: '',
+      realizationRate: '',
       impact: 0,
     },
     donorLapse: {
-      lapsedDonors: 15,
-      averageGift: 10000,
-      numberOfPortfolios: 2,
+      lapsedDonors: '',
+      averageGift: '',
+      numberOfPortfolios: '',
       impact: 0,
     },
   });
@@ -544,19 +544,19 @@ const ROICalculator: React.FC = () => {
           </Tabs>
           
           <div className="mt-6 flex justify-center">
-            {allSectionsCompleted ? (
-              <Button 
-                onClick={calculateImpact}
-                className="bg-gradient-to-r from-instil-purple to-purple-800 hover:from-instil-purple hover:to-purple-700 text-white px-8 py-2"
-              >
-                Calculate ROI
-              </Button>
-            ) : (
+            {!allSectionsCompleted ? (
               <Button 
                 onClick={handleNextClick}
                 className="bg-gradient-to-r from-instil-purple to-purple-800 hover:from-instil-purple hover:to-purple-700 text-white px-8 py-2"
               >
                 Next <ChevronRight size={16} className="ml-1" />
+              </Button>
+            ) : (
+              <Button 
+                onClick={calculateImpact}
+                className="bg-gradient-to-r from-instil-purple to-purple-800 hover:from-instil-purple hover:to-purple-700 text-white px-8 py-2"
+              >
+                Calculate ROI
               </Button>
             )}
           </div>
@@ -565,37 +565,8 @@ const ROICalculator: React.FC = () => {
         {showResults && (
           <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-4 overflow-hidden`}>
             <div className="h-full flex flex-col">
-              <div className="flex flex-row items-center mb-6">
-                <div className="text-center flex-1">
-                  <div className="text-3xl font-bold text-instil-purple">
-                    <AnimatedCounter value={totalImpact} />
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">Potential Annual Impact</p>
-                </div>
-                
-                <div className="flex-1" style={{ minHeight: "160px" }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={chartData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={60}
-                        fill="#8884d8"
-                        dataKey="value"
-                      >
-                        {chartData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip content={<CustomTooltip />} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-              
-              <div className="mt-2">
+              {/* Breakdown Details - Now at the top */}
+              <div className="mb-4">
                 {/* Wasted Annual Salary Spend Section */}
                 <div className="mb-3">
                   <h3 className="text-md font-semibold mb-2">Wasted Annual Salary Spend</h3>
@@ -656,6 +627,39 @@ const ROICalculator: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+              
+              {/* Total Impact and Chart - Now at the bottom, side by side */}
+              <div className="mt-auto flex flex-row items-center gap-4 pt-4 border-t">
+                <div className="flex-1">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-instil-purple">
+                      <AnimatedCounter value={totalImpact} />
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">Potential Annual Impact</p>
+                  </div>
+                </div>
+                
+                <div className="flex-1" style={{ height: "120px" }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={chartData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={50}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip content={<CustomTooltip />} />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>
