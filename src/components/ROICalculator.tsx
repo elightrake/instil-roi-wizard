@@ -662,7 +662,7 @@ const ROICalculator: React.FC = () => {
                 </div>
                 
                 {/* Add more spacing between the sections for desktop only */}
-                <div className={isMobile ? "my-6" : "my-8"}></div>
+                <div className={isMobile ? "my-6" : "my-16"}></div>
                 
                 {/* Opportunity Cost Section */}
                 <div className="mb-3">
