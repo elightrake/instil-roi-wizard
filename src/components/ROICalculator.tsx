@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -362,21 +361,50 @@ const ROICalculator: React.FC = () => {
             onValueChange={(value) => setActiveTab(value)}
             className="w-full"
           >
-            {/* Fixed TabsList to ensure all tabs get proper styling on mobile */}
-            <TabsList className={`grid ${isMobile ? 'grid-cols-2 gap-1' : 'grid-cols-4'} mb-4 bg-instil-light ${isMobile ? 'text-xs' : ''}`}>
-              <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                Admin Waste
-              </TabsTrigger>
-              <TabsTrigger value="siloedCollaboration" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                Siloed Collab
-              </TabsTrigger>
-              <TabsTrigger value="missedUpgrades" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                Missed Upgrades
-              </TabsTrigger>
-              <TabsTrigger value="donorLapse" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                Donor Lapse
-              </TabsTrigger>
-            </TabsList>
+            {/* Fixed TabsList for mobile - using flex instead of grid for better spacing control */}
+            {isMobile ? (
+              <TabsList className="flex flex-wrap gap-1 mb-6 bg-instil-light">
+                <TabsTrigger 
+                  value="adminWaste" 
+                  className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                >
+                  Admin Waste
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="siloedCollaboration" 
+                  className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                >
+                  Siloed Collab
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="missedUpgrades" 
+                  className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                >
+                  Missed Upgrades
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="donorLapse" 
+                  className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                >
+                  Donor Lapse
+                </TabsTrigger>
+              </TabsList>
+            ) : (
+              <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
+                <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  Admin Waste
+                </TabsTrigger>
+                <TabsTrigger value="siloedCollaboration" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  Siloed Collab
+                </TabsTrigger>
+                <TabsTrigger value="missedUpgrades" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  Missed Upgrades
+                </TabsTrigger>
+                <TabsTrigger value="donorLapse" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  Donor Lapse
+                </TabsTrigger>
+              </TabsList>
+            )}
             
             <div className="pt-2">
               <TabsContent value="adminWaste" className="mt-0">
