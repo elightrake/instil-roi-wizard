@@ -448,7 +448,7 @@ const ROICalculator: React.FC = () => {
                   </TabsList>
                 </div>
               ) : (
-                <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
+                <TabsList className="grid grid-cols-4 mb-4 bg-instil-aqua">
                   <TabsTrigger value="adminWaste" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Admin Waste
                   </TabsTrigger>
