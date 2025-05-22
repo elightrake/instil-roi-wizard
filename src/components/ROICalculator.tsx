@@ -144,7 +144,7 @@ const LabelWithTooltip = ({ htmlFor, tooltipText, children }: { htmlFor: string;
   return (
     <div className="flex items-center gap-1">
       <Label htmlFor={htmlFor}>{children}</Label>
-      <Tooltip>
+      <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
           <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
         </TooltipTrigger>
