@@ -68,7 +68,7 @@ export default {
                     aqua: '#52d7c3',
                     light: '#7c6fdb',
                     lightpurple: '#f0e7f7',
-                    dark, "#1f0047",
+                    dark: "#1f0047"
                 }
 			},
 			borderRadius: {
