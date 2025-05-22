@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -400,10 +401,6 @@ const ROICalculator: React.FC = () => {
 
   return (
     <div className="max-w-[1000px] mx-auto bg-instil-dark rounded-lg shadow-lg p-3 md:p-6 flex flex-col max-h-full md:max-h-[600px] overflow-auto">
-      {/*<header className="text-center mb-4 md:mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-instil-purple">Instil ROI Calculator</h1>
-        <p className="text-gray-600 text-sm md:text-base">See how much your organization could save</p>
-      </header>*/}
       
       <div className={`flex flex-col md:flex-row flex-1 ${isMobile ? 'gap-4' : 'gap-6'}`}>
         <div className={`${calculatorAnimationClass} bg-gray-50 rounded-lg p-3 md:p-4 shadow-sm`}>
@@ -416,31 +413,31 @@ const ROICalculator: React.FC = () => {
               {/* Mobile tabs with proper background */}
               {isMobile ? (
                 <div className="w-full bg-instil-lightpurple rounded-md p-1 mb-6">
-                  {/* Instead of custom div structure, use TabsList for both rows to maintain proper structure */}
-                  <TabsList className="flex w-full mb-1 bg-instil-lightpurple">
+                  {/* Fixed TabsList structure for mobile */}
+                  <TabsList className="grid grid-cols-2 w-full mb-1 bg-instil-lightpurple h-auto">
                     <TabsTrigger 
                       value="adminWaste" 
-                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="text-xs px-1 py-2 text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto"
                     >
                       Admin Waste
                     </TabsTrigger>
                     <TabsTrigger 
                       value="siloedCollaboration" 
-                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="text-xs px-1 py-2 text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto"
                     >
                       Siloed Collab
                     </TabsTrigger>
                   </TabsList>
-                  <TabsList className="flex w-full bg-instil-lightpurple">
+                  <TabsList className="grid grid-cols-2 w-full bg-instil-lightpurple h-auto">
                     <TabsTrigger 
                       value="missedUpgrades" 
-                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="text-xs px-1 py-2 text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto"
                     >
                       Missed Upgrades
                     </TabsTrigger>
                     <TabsTrigger 
                       value="donorLapse" 
-                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="text-xs px-1 py-2 text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto"
                     >
                       Donor Lapse
                     </TabsTrigger>
@@ -448,16 +445,28 @@ const ROICalculator: React.FC = () => {
                 </div>
               ) : (
                 <TabsList className="grid grid-cols-4 mb-4 bg-instil-lightpurple">
-                  <TabsTrigger value="adminWaste" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger 
+                    value="adminWaste" 
+                    className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto min-h-[40px]"
+                  >
                     Admin Waste
                   </TabsTrigger>
-                  <TabsTrigger value="siloedCollaboration" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger 
+                    value="siloedCollaboration" 
+                    className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto min-h-[40px]"
+                  >
                     Siloed Collab
                   </TabsTrigger>
-                  <TabsTrigger value="missedUpgrades" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger 
+                    value="missedUpgrades" 
+                    className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto min-h-[40px]"
+                  >
                     Missed Upgrades
                   </TabsTrigger>
-                  <TabsTrigger value="donorLapse" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger 
+                    value="donorLapse" 
+                    className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto min-h-[40px]"
+                  >
                     Donor Lapse
                   </TabsTrigger>
                 </TabsList>
