@@ -421,13 +421,13 @@ const ROICalculator: React.FC = () => {
                   <TabsList className="flex w-full mb-1 bg-transparent">
                     <TabsTrigger 
                       value="adminWaste" 
-                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
                     >
                       Admin Waste
                     </TabsTrigger>
                     <TabsTrigger 
                       value="siloedCollaboration" 
-                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
                     >
                       Siloed Collab
                     </TabsTrigger>
@@ -435,13 +435,13 @@ const ROICalculator: React.FC = () => {
                   <TabsList className="flex w-full bg-transparent">
                     <TabsTrigger 
                       value="missedUpgrades" 
-                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
                     >
                       Missed Upgrades
                     </TabsTrigger>
                     <TabsTrigger 
                       value="donorLapse" 
-                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                      className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
                     >
                       Donor Lapse
                     </TabsTrigger>
@@ -449,16 +449,16 @@ const ROICalculator: React.FC = () => {
                 </div>
               ) : (
                 <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
-                  <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger value="adminWaste" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Admin Waste
                   </TabsTrigger>
-                  <TabsTrigger value="siloedCollaboration" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger value="siloedCollaboration" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Siloed Collab
                   </TabsTrigger>
-                  <TabsTrigger value="missedUpgrades" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger value="missedUpgrades" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Missed Upgrades
                   </TabsTrigger>
-                  <TabsTrigger value="donorLapse" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
+                  <TabsTrigger value="donorLapse" className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Donor Lapse
                   </TabsTrigger>
                 </TabsList>
