@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -829,7 +830,8 @@ const ROICalculator: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className={`${isMobile ? 'w-full h-[120px]' : 'flex-1 h-[90px]'}`}>
+                {/* Fixed the pie chart container positioning and size */}
+                <div className={`${isMobile ? 'w-full h-[120px]' : 'flex-1 h-[90px] max-w-[150px]'}`}>
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -845,7 +847,8 @@ const ROICalculator: React.FC = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip content={<CustomTooltip />} />
+                      {/* Fixed tooltip by using the correct component */}
+                      <RechartsTooltip content={<CustomTooltip />} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
