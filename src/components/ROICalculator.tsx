@@ -1,12 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts';
-import { ChevronRight } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, TooltipProps } from 'recharts';
+import { ChevronRight, HelpCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Type for the calculator's state
 interface CalculatorState {
@@ -112,6 +112,48 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
     );
   }
   return null;
+};
+
+// Field definitions for tooltips
+const fieldDefinitions = {
+  adminWaste: {
+    annualSalary: "The average annual salary of a Major Gift Officer (MGO) in your organization.",
+    hoursPerWeek: "The number of hours per week that could be saved by reducing manual administrative tasks.",
+    numberOfMGOs: "The total number of MGOs in your organization who would benefit from reduced admin work."
+  },
+  siloedCollaboration: {
+    annualSalary: "The average annual salary of team members involved in collaborative fundraising efforts.",
+    hoursWasted: "Hours spent per week due to siloed information and lack of collaborative tools.",
+    numberOfUsers: "Number of team members affected by collaboration inefficiencies."
+  },
+  missedUpgrades: {
+    upgradableDonors: "The number of donors in your database who have the potential for upgrading their gift level.",
+    averageGiftSize: "The average donation amount from your typical donor.",
+    upgradePercentage: "The percentage of upgradable donors you expect to successfully upgrade.",
+    realizationRate: "The percentage of the potential upgrade value you expect to realize."
+  },
+  donorLapse: {
+    lapsedDonors: "The number of donors who typically lapse or become inactive each year per portfolio.",
+    averageGift: "The average gift amount from these at-risk donors.",
+    numberOfPortfolios: "The number of donor portfolios in your organization."
+  }
+};
+
+// Label with tooltip component
+const LabelWithTooltip = ({ htmlFor, tooltipText, children }: { htmlFor: string; tooltipText: string; children: React.ReactNode }) => {
+  return (
+    <div className="flex items-center gap-1">
+      <Label htmlFor={htmlFor}>{children}</Label>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+        </TooltipTrigger>
+        <TooltipContent className="max-w-xs" side="right">
+          <p className="text-xs">{tooltipText}</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  );
 };
 
 const ROICalculator: React.FC = () => {
@@ -357,254 +399,321 @@ const ROICalculator: React.FC = () => {
       
       <div className={`flex flex-col md:flex-row flex-1 ${isMobile ? 'gap-4' : 'gap-6'}`}>
         <div className={`${calculatorAnimationClass} bg-gray-50 rounded-lg p-3 md:p-4 shadow-sm`}>
-          <Tabs 
-            value={activeTab} 
-            onValueChange={(value) => setActiveTab(value)}
-            className="w-full"
-          >
-            {/* Mobile tabs with proper background */}
-            {isMobile ? (
-              <div className="w-full bg-instil-light rounded-md p-1 mb-6">
-                {/* Instead of custom div structure, use TabsList for both rows to maintain proper structure */}
-                <TabsList className="flex w-full mb-1 bg-transparent">
-                  <TabsTrigger 
-                    value="adminWaste" 
-                    className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
-                  >
+          <TooltipProvider>
+            <Tabs 
+              value={activeTab} 
+              onValueChange={(value) => setActiveTab(value)}
+              className="w-full"
+            >
+              {/* Mobile tabs with proper background */}
+              {isMobile ? (
+                <div className="w-full bg-instil-light rounded-md p-1 mb-6">
+                  {/* Instead of custom div structure, use TabsList for both rows to maintain proper structure */}
+                  <TabsList className="flex w-full mb-1 bg-transparent">
+                    <TabsTrigger 
+                      value="adminWaste" 
+                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                    >
+                      Admin Waste
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="siloedCollaboration" 
+                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                    >
+                      Siloed Collab
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsList className="flex w-full bg-transparent">
+                    <TabsTrigger 
+                      value="missedUpgrades" 
+                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                    >
+                      Missed Upgrades
+                    </TabsTrigger>
+                    <TabsTrigger 
+                      value="donorLapse" 
+                      className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
+                    >
+                      Donor Lapse
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+              ) : (
+                <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
+                  <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Admin Waste
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="siloedCollaboration" 
-                    className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
-                  >
+                  <TabsTrigger value="siloedCollaboration" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Siloed Collab
                   </TabsTrigger>
-                </TabsList>
-                <TabsList className="flex w-full bg-transparent">
-                  <TabsTrigger 
-                    value="missedUpgrades" 
-                    className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
-                  >
+                  <TabsTrigger value="missedUpgrades" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Missed Upgrades
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="donorLapse" 
-                    className="flex-1 text-xs data-[state=active]:bg-instil-purple data-[state=active]:text-white"
-                  >
+                  <TabsTrigger value="donorLapse" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
                     Donor Lapse
                   </TabsTrigger>
                 </TabsList>
-              </div>
-            ) : (
-              <TabsList className="grid grid-cols-4 mb-4 bg-instil-light">
-                <TabsTrigger value="adminWaste" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                  Admin Waste
-                </TabsTrigger>
-                <TabsTrigger value="siloedCollaboration" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                  Siloed Collab
-                </TabsTrigger>
-                <TabsTrigger value="missedUpgrades" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                  Missed Upgrades
-                </TabsTrigger>
-                <TabsTrigger value="donorLapse" className="data-[state=active]:bg-instil-purple data-[state=active]:text-white">
-                  Donor Lapse
-                </TabsTrigger>
-              </TabsList>
-            )}
-            
-            <div className="pt-2">
-              <TabsContent value="adminWaste" className="mt-0">
-                <Card>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="annualSalary">Annual Salary</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                        <Input 
-                          id="annualSalary"
-                          type="text" 
-                          className="pl-8"
-                          placeholder="125,000"
-                          value={calculatorState.adminWaste.annualSalary === '' ? '' : formatNumber(calculatorState.adminWaste.annualSalary)}
-                          onChange={(e) => handleInputChange('adminWaste', 'annualSalary', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="hoursPerWeek">Hours Per Week Saved</Label>
-                      <Input 
-                        id="hoursPerWeek"
-                        type="text" 
-                        placeholder="15"
-                        value={calculatorState.adminWaste.hoursPerWeek === '' ? '' : formatNumber(calculatorState.adminWaste.hoursPerWeek)}
-                        onChange={(e) => handleInputChange('adminWaste', 'hoursPerWeek', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="numberOfMGOs">Number of MGOs</Label>
-                      <Input 
-                        id="numberOfMGOs"
-                        type="text" 
-                        placeholder="4"
-                        value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : formatNumber(calculatorState.adminWaste.numberOfMGOs)}
-                        onChange={(e) => handleInputChange('adminWaste', 'numberOfMGOs', e.target.value)}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+              )}
               
-              <TabsContent value="siloedCollaboration" className="mt-0">
-                <Card>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="scAnnualSalary">Annual Salary</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                        <Input 
-                          id="scAnnualSalary"
-                          type="text" 
-                          className="pl-8"
-                          placeholder="75,000"
-                          value={calculatorState.siloedCollaboration.annualSalary === '' ? '' : formatNumber(calculatorState.siloedCollaboration.annualSalary)}
-                          onChange={(e) => handleInputChange('siloedCollaboration', 'annualSalary', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="hoursWasted">Hours Wasted Per Week</Label>
-                      <Input 
-                        id="hoursWasted"
-                        type="text" 
-                        placeholder="5"
-                        value={calculatorState.siloedCollaboration.hoursWasted === '' ? '' : formatNumber(calculatorState.siloedCollaboration.hoursWasted)}
-                        onChange={(e) => handleInputChange('siloedCollaboration', 'hoursWasted', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="numberOfUsers">Number of Users</Label>
-                      <Input 
-                        id="numberOfUsers"
-                        type="text" 
-                        placeholder="2"
-                        value={calculatorState.siloedCollaboration.numberOfUsers === '' ? '' : formatNumber(calculatorState.siloedCollaboration.numberOfUsers)}
-                        onChange={(e) => handleInputChange('siloedCollaboration', 'numberOfUsers', e.target.value)}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="missedUpgrades" className="mt-0">
-                <Card>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="upgradableDonors">Number of Upgradable Donors</Label>
-                      <Input 
-                        id="upgradableDonors"
-                        type="text" 
-                        placeholder="65"
-                        value={calculatorState.missedUpgrades.upgradableDonors === '' ? '' : formatNumber(calculatorState.missedUpgrades.upgradableDonors)}
-                        onChange={(e) => handleInputChange('missedUpgrades', 'upgradableDonors', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="averageGiftSize">Average Gift Size</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
-                        <Input 
-                          id="averageGiftSize"
-                          type="text" 
-                          className="pl-8"
-                          placeholder="10,000"
-                          value={calculatorState.missedUpgrades.averageGiftSize === '' ? '' : formatNumber(calculatorState.missedUpgrades.averageGiftSize)}
-                          onChange={(e) => handleInputChange('missedUpgrades', 'averageGiftSize', e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
+              <div className="pt-2">
+                <TabsContent value="adminWaste" className="mt-0">
+                  <Card>
+                    <CardContent className="pt-6 space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="upgradePercentage">Upgrade %</Label>
+                        <LabelWithTooltip 
+                          htmlFor="annualSalary" 
+                          tooltipText={fieldDefinitions.adminWaste.annualSalary}
+                        >
+                          Annual Salary
+                        </LabelWithTooltip>
                         <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                           <Input 
-                            id="upgradePercentage"
+                            id="annualSalary"
                             type="text" 
-                            placeholder="50"
-                            value={calculatorState.missedUpgrades.upgradePercentage === '' ? '' : formatNumber(calculatorState.missedUpgrades.upgradePercentage)}
-                            onChange={(e) => handleInputChange('missedUpgrades', 'upgradePercentage', e.target.value)}
+                            className="pl-8"
+                            placeholder="125,000"
+                            value={calculatorState.adminWaste.annualSalary === '' ? '' : formatNumber(calculatorState.adminWaste.annualSalary)}
+                            onChange={(e) => handleInputChange('adminWaste', 'annualSalary', e.target.value)}
                           />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
                         </div>
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="realizationRate">Realization Rate %</Label>
-                        <div className="relative">
-                          <Input 
-                            id="realizationRate"
-                            type="text" 
-                            placeholder="50"
-                            value={calculatorState.missedUpgrades.realizationRate === '' ? '' : formatNumber(calculatorState.missedUpgrades.realizationRate)}
-                            onChange={(e) => handleInputChange('missedUpgrades', 'realizationRate', e.target.value)}
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="donorLapse" className="mt-0">
-                <Card>
-                  <CardContent className="pt-6 space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="lapsedDonors">Number of Lapsed Donors</Label>
-                      <Input 
-                        id="lapsedDonors"
-                        type="text" 
-                        placeholder="15"
-                        value={calculatorState.donorLapse.lapsedDonors === '' ? '' : formatNumber(calculatorState.donorLapse.lapsedDonors)}
-                        onChange={(e) => handleInputChange('donorLapse', 'lapsedDonors', e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="donorAverageGift">Average Gift</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                        <LabelWithTooltip 
+                          htmlFor="hoursPerWeek" 
+                          tooltipText={fieldDefinitions.adminWaste.hoursPerWeek}
+                        >
+                          Hours Per Week Saved
+                        </LabelWithTooltip>
                         <Input 
-                          id="donorAverageGift"
+                          id="hoursPerWeek"
                           type="text" 
-                          className="pl-8"
-                          placeholder="10,000"
-                          value={calculatorState.donorLapse.averageGift === '' ? '' : formatNumber(calculatorState.donorLapse.averageGift)}
-                          onChange={(e) => handleInputChange('donorLapse', 'averageGift', e.target.value)}
+                          placeholder="15"
+                          value={calculatorState.adminWaste.hoursPerWeek === '' ? '' : formatNumber(calculatorState.adminWaste.hoursPerWeek)}
+                          onChange={(e) => handleInputChange('adminWaste', 'hoursPerWeek', e.target.value)}
                         />
                       </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="numberOfPortfolios">Number of Portfolios</Label>
-                      <Input 
-                        id="numberOfPortfolios"
-                        type="text" 
-                        placeholder="2"
-                        value={calculatorState.donorLapse.numberOfPortfolios === '' ? '' : formatNumber(calculatorState.donorLapse.numberOfPortfolios)}
-                        onChange={(e) => handleInputChange('donorLapse', 'numberOfPortfolios', e.target.value)}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </div>
-          </Tabs>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="numberOfMGOs" 
+                          tooltipText={fieldDefinitions.adminWaste.numberOfMGOs}
+                        >
+                          Number of MGOs
+                        </LabelWithTooltip>
+                        <Input 
+                          id="numberOfMGOs"
+                          type="text" 
+                          placeholder="4"
+                          value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : formatNumber(calculatorState.adminWaste.numberOfMGOs)}
+                          onChange={(e) => handleInputChange('adminWaste', 'numberOfMGOs', e.target.value)}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="siloedCollaboration" className="mt-0">
+                  <Card>
+                    <CardContent className="pt-6 space-y-4">
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="scAnnualSalary" 
+                          tooltipText={fieldDefinitions.siloedCollaboration.annualSalary}
+                        >
+                          Annual Salary
+                        </LabelWithTooltip>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                          <Input 
+                            id="scAnnualSalary"
+                            type="text" 
+                            className="pl-8"
+                            placeholder="75,000"
+                            value={calculatorState.siloedCollaboration.annualSalary === '' ? '' : formatNumber(calculatorState.siloedCollaboration.annualSalary)}
+                            onChange={(e) => handleInputChange('siloedCollaboration', 'annualSalary', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="hoursWasted" 
+                          tooltipText={fieldDefinitions.siloedCollaboration.hoursWasted}
+                        >
+                          Hours Wasted Per Week
+                        </LabelWithTooltip>
+                        <Input 
+                          id="hoursWasted"
+                          type="text" 
+                          placeholder="5"
+                          value={calculatorState.siloedCollaboration.hoursWasted === '' ? '' : formatNumber(calculatorState.siloedCollaboration.hoursWasted)}
+                          onChange={(e) => handleInputChange('siloedCollaboration', 'hoursWasted', e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="numberOfUsers" 
+                          tooltipText={fieldDefinitions.siloedCollaboration.numberOfUsers}
+                        >
+                          Number of Users
+                        </LabelWithTooltip>
+                        <Input 
+                          id="numberOfUsers"
+                          type="text" 
+                          placeholder="2"
+                          value={calculatorState.siloedCollaboration.numberOfUsers === '' ? '' : formatNumber(calculatorState.siloedCollaboration.numberOfUsers)}
+                          onChange={(e) => handleInputChange('siloedCollaboration', 'numberOfUsers', e.target.value)}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="missedUpgrades" className="mt-0">
+                  <Card>
+                    <CardContent className="pt-6 space-y-4">
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="upgradableDonors" 
+                          tooltipText={fieldDefinitions.missedUpgrades.upgradableDonors}
+                        >
+                          Number of Upgradable Donors
+                        </LabelWithTooltip>
+                        <Input 
+                          id="upgradableDonors"
+                          type="text" 
+                          placeholder="65"
+                          value={calculatorState.missedUpgrades.upgradableDonors === '' ? '' : formatNumber(calculatorState.missedUpgrades.upgradableDonors)}
+                          onChange={(e) => handleInputChange('missedUpgrades', 'upgradableDonors', e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="averageGiftSize" 
+                          tooltipText={fieldDefinitions.missedUpgrades.averageGiftSize}
+                        >
+                          Average Gift Size
+                        </LabelWithTooltip>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                          <Input 
+                            id="averageGiftSize"
+                            type="text" 
+                            className="pl-8"
+                            placeholder="10,000"
+                            value={calculatorState.missedUpgrades.averageGiftSize === '' ? '' : formatNumber(calculatorState.missedUpgrades.averageGiftSize)}
+                            onChange={(e) => handleInputChange('missedUpgrades', 'averageGiftSize', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <LabelWithTooltip 
+                            htmlFor="upgradePercentage" 
+                            tooltipText={fieldDefinitions.missedUpgrades.upgradePercentage}
+                          >
+                            Upgrade %
+                          </LabelWithTooltip>
+                          <div className="relative">
+                            <Input 
+                              id="upgradePercentage"
+                              type="text" 
+                              placeholder="50"
+                              value={calculatorState.missedUpgrades.upgradePercentage === '' ? '' : formatNumber(calculatorState.missedUpgrades.upgradePercentage)}
+                              onChange={(e) => handleInputChange('missedUpgrades', 'upgradePercentage', e.target.value)}
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <LabelWithTooltip 
+                            htmlFor="realizationRate" 
+                            tooltipText={fieldDefinitions.missedUpgrades.realizationRate}
+                          >
+                            Realization Rate %
+                          </LabelWithTooltip>
+                          <div className="relative">
+                            <Input 
+                              id="realizationRate"
+                              type="text" 
+                              placeholder="50"
+                              value={calculatorState.missedUpgrades.realizationRate === '' ? '' : formatNumber(calculatorState.missedUpgrades.realizationRate)}
+                              onChange={(e) => handleInputChange('missedUpgrades', 'realizationRate', e.target.value)}
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="donorLapse" className="mt-0">
+                  <Card>
+                    <CardContent className="pt-6 space-y-4">
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="lapsedDonors" 
+                          tooltipText={fieldDefinitions.donorLapse.lapsedDonors}
+                        >
+                          Number of Lapsed Donors
+                        </LabelWithTooltip>
+                        <Input 
+                          id="lapsedDonors"
+                          type="text" 
+                          placeholder="15"
+                          value={calculatorState.donorLapse.lapsedDonors === '' ? '' : formatNumber(calculatorState.donorLapse.lapsedDonors)}
+                          onChange={(e) => handleInputChange('donorLapse', 'lapsedDonors', e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="donorAverageGift" 
+                          tooltipText={fieldDefinitions.donorLapse.averageGift}
+                        >
+                          Average Gift
+                        </LabelWithTooltip>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                          <Input 
+                            id="donorAverageGift"
+                            type="text" 
+                            className="pl-8"
+                            placeholder="10,000"
+                            value={calculatorState.donorLapse.averageGift === '' ? '' : formatNumber(calculatorState.donorLapse.averageGift)}
+                            onChange={(e) => handleInputChange('donorLapse', 'averageGift', e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
+                          htmlFor="numberOfPortfolios" 
+                          tooltipText={fieldDefinitions.donorLapse.numberOfPortfolios}
+                        >
+                          Number of Portfolios
+                        </LabelWithTooltip>
+                        <Input 
+                          id="numberOfPortfolios"
+                          type="text" 
+                          placeholder="2"
+                          value={calculatorState.donorLapse.numberOfPortfolios === '' ? '' : formatNumber(calculatorState.donorLapse.numberOfPortfolios)}
+                          onChange={(e) => handleInputChange('donorLapse', 'numberOfPortfolios', e.target.value)}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </div>
+            </Tabs>
+          </TooltipProvider>
           
           <div className="mt-6 flex justify-center">
             {!allSectionsCompleted ? (
