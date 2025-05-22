@@ -118,12 +118,12 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
 const fieldDefinitions = {
   adminWaste: {
     annualSalary: "The average annual salary of a Major Gift Officer (MGO) in your organization.",
-    hoursPerWeek: "The number of hours per week that could be saved by reducing manual administrative tasks.",
+    hoursPerWeek: "The number of hours per week spent on manual administrative tasks.",
     numberOfMGOs: "The total number of MGOs in your organization who would benefit from reduced admin work."
   },
   siloedCollaboration: {
     annualSalary: "The average annual salary of team members involved in collaborative fundraising efforts.",
-    hoursWasted: "Hours spent per week due to siloed information and lack of collaborative tools.",
+    hoursWasted: "Hours wasted per week due to siloed information and lack of collaborative tools.",
     numberOfUsers: "Number of team members affected by collaboration inefficiencies."
   },
   missedUpgrades: {
@@ -484,7 +484,7 @@ const ROICalculator: React.FC = () => {
                           htmlFor="hoursPerWeek" 
                           tooltipText={fieldDefinitions.adminWaste.hoursPerWeek}
                         >
-                          Hours Per Week Saved
+                          Admin Hours Per Week
                         </LabelWithTooltip>
                         <Input 
                           id="hoursPerWeek"
