@@ -37,6 +37,14 @@ interface CalculatorState {
   };
 }
 
+// Section descriptions
+const sectionDescriptions = {
+  adminWaste: "Calculate the cost of manual administrative tasks that could be streamlined or automated with better tools.",
+  siloedCollaboration: "Quantify wasted resources due to disconnected information and inefficient team collaboration.",
+  missedUpgrades: "Estimate potential revenue gains from upgrading donors to higher contribution levels.",
+  donorLapse: "Calculate the cost of donor attrition that could be prevented with better donor management."
+};
+
 // Helper function to format currency
 const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('en-US', {
@@ -455,6 +463,11 @@ const ROICalculator: React.FC = () => {
                 </TabsList>
               )}
               
+              {/* Section description that changes based on active tab */}
+              <div className="bg-instil-light/30 p-2 rounded-md mb-4 text-sm text-gray-600">
+                <p>{sectionDescriptions[activeTab as keyof typeof sectionDescriptions]}</p>
+              </div>
+              
               <div className="pt-2">
                 <TabsContent value="adminWaste" className="mt-0">
                   <Card>
@@ -770,8 +783,8 @@ const ROICalculator: React.FC = () => {
                   </div>
                 </div>
                 
-                {/* Add more spacing between the sections for desktop only */}
-                <div className={isMobile ? "my-6" : "my-16"}></div>
+                {/* Increased spacing between sections for desktop only */}
+                <div className={isMobile ? "my-6" : "my-20"}></div>
                 
                 {/* Opportunity Cost Section */}
                 <div className="mb-3">
@@ -805,7 +818,7 @@ const ROICalculator: React.FC = () => {
                 </div>
               </div>
               
-              {/* Total Impact and Chart - Adjusted for mobile */}
+              {/* Total Impact and Chart */}
               <div className={`flex ${isMobile ? 'flex-col items-center' : 'flex-row items-center'} gap-2 mt-auto`}>
                 <div className={`${isMobile ? 'w-full' : 'flex-1'}`}>
                   <div className="text-center">
@@ -832,7 +845,7 @@ const ROICalculator: React.FC = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip content={<CustomTooltip />} />
+                      <RechartsTooltip content={<CustomTooltip />} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
