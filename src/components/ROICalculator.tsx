@@ -400,7 +400,7 @@ const ROICalculator: React.FC = () => {
       : "w-full transition-all duration-500 ease-in-out";
 
   return (
-    <div className="max-w-[1000px] mx-auto bg-white rounded-lg shadow-lg p-3 md:p-6 flex flex-col max-h-full md:max-h-[600px] overflow-auto">
+    <div className="max-w-[1000px] mx-auto bg-instil-light rounded-lg shadow-lg p-3 md:p-6 flex flex-col max-h-full md:max-h-[600px] overflow-auto">
       {/*<header className="text-center mb-4 md:mb-6">
         <h1 className="text-xl md:text-2xl font-bold text-instil-purple">Instil ROI Calculator</h1>
         <p className="text-gray-600 text-sm md:text-base">See how much your organization could save</p>
@@ -418,7 +418,7 @@ const ROICalculator: React.FC = () => {
               {isMobile ? (
                 <div className="w-full bg-instil-light rounded-md p-1 mb-6">
                   {/* Instead of custom div structure, use TabsList for both rows to maintain proper structure */}
-                  <TabsList className="flex w-full mb-1 bg-transparent">
+                  <TabsList className="flex w-full mb-1 bg-instil-lightpurple">
                     <TabsTrigger 
                       value="adminWaste" 
                       className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
@@ -432,7 +432,7 @@ const ROICalculator: React.FC = () => {
                       Siloed Collab
                     </TabsTrigger>
                   </TabsList>
-                  <TabsList className="flex w-full bg-transparent">
+                  <TabsList className="flex w-full bg-instil-lightpurple">
                     <TabsTrigger 
                       value="missedUpgrades" 
                       className="flex-1 text-xs text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white"
