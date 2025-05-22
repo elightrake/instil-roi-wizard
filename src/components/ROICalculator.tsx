@@ -401,10 +401,10 @@ const ROICalculator: React.FC = () => {
 
   return (
     <div className="max-w-[1000px] mx-auto bg-white rounded-lg shadow-lg p-3 md:p-6 flex flex-col max-h-full md:max-h-[600px] overflow-auto">
-      <header className="text-center mb-4 md:mb-6">
+      {/*<header className="text-center mb-4 md:mb-6">
         <h1 className="text-xl md:text-2xl font-bold text-instil-purple">Instil ROI Calculator</h1>
         <p className="text-gray-600 text-sm md:text-base">See how much your organization could save</p>
-      </header>
+      </header>*/}
       
       <div className={`flex flex-col md:flex-row flex-1 ${isMobile ? 'gap-4' : 'gap-6'}`}>
         <div className={`${calculatorAnimationClass} bg-gray-50 rounded-lg p-3 md:p-4 shadow-sm`}>
