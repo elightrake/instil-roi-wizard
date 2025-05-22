@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -751,11 +750,11 @@ const ROICalculator: React.FC = () => {
         {showResults && (
           <div className={`${resultsAnimationClass} bg-white rounded-lg border border-gray-100 shadow-sm p-3 md:p-4 overflow-hidden`}>
             <div className="h-full flex flex-col">
-              {/* Impact Breakdown - Expanded with more vertical space */}
+              {/* Impact Breakdown - Adjusted for responsive text */}
               <div className="flex-grow space-y-3">
-                {/* Wasted Annual Salary Spend Section */}
+                {/* Wasted Annual Salary Spend Section - Updated with responsive text */}
                 <div className="mb-3">
-                  <h3 className="text-sm font-semibold mb-2">Wasted Annual Salary Spend</h3>
+                  <h3 className="text-xs md:text-sm font-semibold mb-2 transition-all duration-300">Wasted Annual Salary Spend</h3>
                   <div className="grid grid-cols-1 gap-1">
                     {chartData
                       .filter(item => item.category === 'Wasted Annual Salary Spend')
@@ -785,11 +784,11 @@ const ROICalculator: React.FC = () => {
                 </div>
                 
                 {/* Add more spacing between the sections for desktop only */}
-                <div className={isMobile ? "my-6" : "my-16"}></div>
+                <div className={isMobile ? "my-4" : "my-6"}></div>
                 
-                {/* Opportunity Cost Section */}
+                {/* Opportunity Cost Section - Updated with responsive text */}
                 <div className="mb-3">
-                  <h3 className="mt-8 text-sm font-semibold mb-2">Opportunity Cost</h3>
+                  <h3 className="text-xs md:text-sm font-semibold mb-2 transition-all duration-300">Opportunity Cost</h3>
                   <div className="grid grid-cols-1 gap-1">
                     {chartData
                       .filter(item => item.category === 'Opportunity Cost')
@@ -823,7 +822,7 @@ const ROICalculator: React.FC = () => {
               <div className={`flex ${isMobile ? 'flex-col items-center' : 'flex-row items-center'} gap-2 mt-auto`}>
                 <div className={`${isMobile ? 'w-full' : 'flex-1'}`}>
                   <div className="text-center">
-                    <div className="mt-2 text-3xl md:text-4xl font-bold text-instil-purple">
+                    <div className="mt-2 text-2xl md:text-3xl lg:text-4xl font-bold text-instil-purple transition-all duration-300">
                       <AnimatedCounter value={totalImpact} />
                     </div>
                     <p className="text-xs text-gray-600">Potential Annual Impact</p>
@@ -847,7 +846,6 @@ const ROICalculator: React.FC = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      {/* Fixed tooltip by using the correct component */}
                       <RechartsTooltip content={<CustomTooltip />} />
                     </PieChart>
                   </ResponsiveContainer>
