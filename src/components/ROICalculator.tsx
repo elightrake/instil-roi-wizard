@@ -37,6 +37,14 @@ interface CalculatorState {
   };
 }
 
+// Section descriptions for each tab
+const sectionDescriptions = {
+  adminWaste: "Calculate the cost of time spent on manual administrative tasks that could be automated.",
+  siloedCollaboration: "Measure the financial impact of inefficient collaboration due to siloed information.",
+  missedUpgrades: "Estimate potential revenue from upgrading existing donors to higher gift levels.",
+  donorLapse: "Quantify the cost of donor attrition that could be prevented with better management."
+};
+
 // Helper function to format currency
 const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('en-US', {
@@ -454,6 +462,11 @@ const ROICalculator: React.FC = () => {
                   </TabsTrigger>
                 </TabsList>
               )}
+              
+              {/* Section description - shows only for active tab */}
+              <div className="mb-4 text-sm text-gray-600 italic px-1">
+                {sectionDescriptions[activeTab as keyof typeof sectionDescriptions]}
+              </div>
               
               <div className="pt-2">
                 <TabsContent value="adminWaste" className="mt-0">
