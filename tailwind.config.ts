@@ -64,9 +64,9 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
                 instil: {
-                    purple: '#6A1B9A',
-                    aqua: '#42F2F7',
-                    light: '#f0e7f7',
+                    purple: '#302661',
+                    aqua: '#52d7c3',
+                    light: '#7c6fdb',
                 }
 			},
 			borderRadius: {
