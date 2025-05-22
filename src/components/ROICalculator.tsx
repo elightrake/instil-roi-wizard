@@ -416,7 +416,7 @@ const ROICalculator: React.FC = () => {
             >
               {/* Mobile tabs with proper background */}
               {isMobile ? (
-                <div className="w-full bg-instil-light rounded-md p-1 mb-6">
+                <div className="w-full bg-instil-lightpurple rounded-md p-1 mb-6">
                   {/* Instead of custom div structure, use TabsList for both rows to maintain proper structure */}
                   <TabsList className="flex w-full mb-1 bg-instil-lightpurple">
                     <TabsTrigger 
