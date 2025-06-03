@@ -9,19 +9,12 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Set the basename for GitHub Pages deployment
-const basename = import.meta.env.PROD ? '/instil-roi-wizard' : '';
-
-console.log('App loading with basename:', basename);
-console.log('Current location:', window.location.href);
-console.log('Environment:', import.meta.env.MODE);
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={basename}>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
