@@ -135,7 +135,7 @@ const fieldDefinitions = {
     numberOfUsers: "Number of team members affected by collaboration inefficiencies."
   },
   missedUpgrades: {
-    upgradableDonors: "The number of donors with potential to upgrade their gift level.",
+    upgradableDonors: "The percentage of donors you feel you will successfully upgrade.",
     averageGiftSize: "The average donation amount from your typical donor.",
     upgradePercentage: "The percentage of donors you feel you will successfully upgrade.",
     realizationRate: "The percent of extra giving potential from donors that you expect to actually raise."
@@ -482,6 +482,22 @@ const ROICalculator: React.FC = () => {
                     <CardContent className="pt-6 space-y-4">
                       <div className="space-y-2">
                         <LabelWithTooltip 
+                          htmlFor="numberOfMGOs" 
+                          tooltipText={fieldDefinitions.adminWaste.numberOfMGOs}
+                        >
+                          # of Fundraisers
+                        </LabelWithTooltip>
+                        <Input 
+                          id="numberOfMGOs"
+                          type="text" 
+                          placeholder="4"
+                          value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : formatNumber(calculatorState.adminWaste.numberOfMGOs)}
+                          onChange={(e) => handleInputChange('adminWaste', 'numberOfMGOs', e.target.value)}
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <LabelWithTooltip 
                           htmlFor="annualSalary" 
                           tooltipText={fieldDefinitions.adminWaste.annualSalary}
                         >
@@ -513,22 +529,6 @@ const ROICalculator: React.FC = () => {
                           placeholder="15"
                           value={calculatorState.adminWaste.hoursPerWeek === '' ? '' : formatNumber(calculatorState.adminWaste.hoursPerWeek)}
                           onChange={(e) => handleInputChange('adminWaste', 'hoursPerWeek', e.target.value)}
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <LabelWithTooltip 
-                          htmlFor="numberOfMGOs" 
-                          tooltipText={fieldDefinitions.adminWaste.numberOfMGOs}
-                        >
-                          # of Fundraisers
-                        </LabelWithTooltip>
-                        <Input 
-                          id="numberOfMGOs"
-                          type="text" 
-                          placeholder="4"
-                          value={calculatorState.adminWaste.numberOfMGOs === '' ? '' : formatNumber(calculatorState.adminWaste.numberOfMGOs)}
-                          onChange={(e) => handleInputChange('adminWaste', 'numberOfMGOs', e.target.value)}
                         />
                       </div>
                     </CardContent>
