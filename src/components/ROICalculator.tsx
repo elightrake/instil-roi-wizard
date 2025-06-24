@@ -135,7 +135,7 @@ const fieldDefinitions = {
     numberOfUsers: "Number of team members affected by collaboration inefficiencies."
   },
   missedUpgrades: {
-    upgradableDonors: "The percentage of donors you feel you will successfully upgrade.",
+    upgradableDonors: "The number of donors in your database who have the potential for upgrading their gift level.",
     averageGiftSize: "The average donation amount from your typical donor.",
     upgradePercentage: "The percentage of donors you feel you will successfully upgrade.",
     realizationRate: "The percent of extra giving potential from donors that you expect to actually raise."
