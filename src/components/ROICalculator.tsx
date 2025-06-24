@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,7 +40,7 @@ interface CalculatorState {
 // Section descriptions for each tab
 const sectionDescriptions = {
   adminWaste: "Calculate the cost of time spent on manual administrative tasks that could be automated.",
-  siloedCollaboration: "Measure the financial impact of inefficient collaboration due to siloed information.",
+  siloedCollaboration: "Measure the cost of inefficient collaboration across development teams.",
   missedUpgrades: "Estimate potential revenue from upgrading existing donors to higher gift levels.",
   donorLapse: "Quantify the cost of donor attrition that could be prevented with better management."
 };
@@ -126,9 +125,9 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
 // Field definitions for tooltips
 const fieldDefinitions = {
   adminWaste: {
-    annualSalary: "The average annual salary of a Major Gift Officer (MGO) in your organization.",
-    hoursPerWeek: "The number of hours per week spent on manual administrative tasks.",
-    numberOfMGOs: "The total number of MGOs in your organization who would benefit from reduced admin work."
+    annualSalary: "The average annual salary of a fundraiser in your organization.",
+    hoursPerWeek: "The number of hours per week spent on data entry.",
+    numberOfMGOs: "The total number of fundraisers in your organization who would benefit from reduced admin work."
   },
   siloedCollaboration: {
     annualSalary: "The average annual salary of team members involved in collaborative fundraising efforts.",
@@ -136,13 +135,13 @@ const fieldDefinitions = {
     numberOfUsers: "Number of team members affected by collaboration inefficiencies."
   },
   missedUpgrades: {
-    upgradableDonors: "The number of donors in your database who have the potential for upgrading their gift level.",
+    upgradableDonors: "The number of donors with potential to upgrade their gift level.",
     averageGiftSize: "The average donation amount from your typical donor.",
-    upgradePercentage: "The percentage of upgradable donors you expect to successfully upgrade.",
-    realizationRate: "The percentage of the potential upgrade value you expect to realize."
+    upgradePercentage: "The percentage of donors you feel you will successfully upgrade.",
+    realizationRate: "The percent of extra giving potential from donors that you expect to actually raise."
   },
   donorLapse: {
-    lapsedDonors: "The number of donors who typically lapse or become inactive each year per portfolio.",
+    lapsedDonors: "The average number of donors who stop giving or become inactive each year in a portfolio.",
     averageGift: "The average gift amount from these at-risk donors.",
     numberOfPortfolios: "The number of donor portfolios in your organization."
   }
@@ -425,7 +424,7 @@ const ROICalculator: React.FC = () => {
                       value="siloedCollaboration" 
                       className="text-xs px-1 py-2 text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto"
                     >
-                      Siloed Collab
+                      Isolated Teamwork
                     </TabsTrigger>
                   </TabsList>
                   <TabsList className="grid grid-cols-2 w-full bg-instil-lightpurple h-auto">
@@ -455,7 +454,7 @@ const ROICalculator: React.FC = () => {
                     value="siloedCollaboration" 
                     className="text-instil-purple data-[state=active]:bg-instil-purple data-[state=active]:text-white whitespace-normal h-auto min-h-[40px]"
                   >
-                    Siloed Collab
+                    Isolated Teamwork
                   </TabsTrigger>
                   <TabsTrigger 
                     value="missedUpgrades" 
@@ -506,7 +505,7 @@ const ROICalculator: React.FC = () => {
                           htmlFor="hoursPerWeek" 
                           tooltipText={fieldDefinitions.adminWaste.hoursPerWeek}
                         >
-                          Admin Hours Per Week
+                          Hours Spent on Data Entry
                         </LabelWithTooltip>
                         <Input 
                           id="hoursPerWeek"
@@ -522,7 +521,7 @@ const ROICalculator: React.FC = () => {
                           htmlFor="numberOfMGOs" 
                           tooltipText={fieldDefinitions.adminWaste.numberOfMGOs}
                         >
-                          Number of MGOs
+                          # of Fundraisers
                         </LabelWithTooltip>
                         <Input 
                           id="numberOfMGOs"
@@ -602,7 +601,7 @@ const ROICalculator: React.FC = () => {
                           htmlFor="upgradableDonors" 
                           tooltipText={fieldDefinitions.missedUpgrades.upgradableDonors}
                         >
-                          Number of Upgradable Donors
+                          # of Donors with Potential to Upgrade
                         </LabelWithTooltip>
                         <Input 
                           id="upgradableDonors"
